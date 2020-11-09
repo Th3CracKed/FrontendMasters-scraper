@@ -4,12 +4,10 @@
     "module": "commonjs",
     "lib": [
       "dom",
-      "es6",
-      "es2017",
-      "esnext.asynciterable"
+      "es2020"
     ],
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "./build",
     "moduleResolution": "node",
     "removeComments": true,
     "noImplicitAny": true,
@@ -25,13 +23,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "baseUrl": "."
+    "baseUrl": ".",
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
-    "./src/**/*.tsx",
     "./src/**/*.ts"
   ]
 }
