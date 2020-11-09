@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import { Resolver } from 'dns';
 import fs from 'fs'
 import path from 'path';
 import R from 'ramda';
@@ -35,13 +34,6 @@ function createAsyncFactoryToDownloadCourse(currentCourse: Course): (() => Promi
         resolve(`course = ${courseId} ${currentCourse?.title} is undefined, archived or obsolete`);
         return;
       }
-      console.log(`-----Getting Course ${currentCourse?.title} Detail-----`);
-      const response: AxiosResponse<Course> = await axios.get(`https://api.frontendmasters.com/v2.3/m/courses/${courseId}/`, { headers });
-      if (!response) {
-        console.log(`undefined axios response for ${courseId}`);
-        resolve(`undefined axios response for ${courseId}`);
-        return;
-      }
       const suffix = currentCourse?.state?.stateType === 'updated' || currentCourse?.state?.targetID ? '__updated' : '';
       const courseFolder = removeIllegalCharacter(currentCourse?.title);
       const coursePath = `${saveFolderPath}/${courseFolder + suffix}`;
@@ -52,6 +44,14 @@ function createAsyncFactoryToDownloadCourse(currentCourse: Course): (() => Promi
       }
       console.log(`Creating folder ${coursePath}`);
       fs.mkdirSync(path.join(__dirname, coursePath), { recursive: true });
+
+      console.log(`-----Getting Course ${currentCourse?.title} Detail-----`);
+      const response: AxiosResponse<Course> = await axios.get(`https://api.frontendmasters.com/v2.3/m/courses/${courseId}/`, { headers });
+      if (!response) {
+        console.log(`undefined axios response for ${courseId}`);
+        resolve(`undefined axios response for ${courseId}`);
+        return;
+      }
       const courseDetail = response?.data;
       console.log(`CourseDetail title : ${courseDetail?.title}`);
       fs.writeFileSync(path.resolve(__dirname, coursePath, 'info.json'), JSON.stringify(courseDetail));
